@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fixpro
+      POSTGRES_PASSWORD: fixpro_dev
+      POSTGRES_DB: fixpro
+    ports:
+      - "5432:5432"
+    volumes:
+      - fixpro_pgdata:/var/lib/postgresql/data
+volumes:
+  fixpro_pgdata:
