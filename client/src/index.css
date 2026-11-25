@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────── Theme tokens. Colours are RGB triplets so Tailwind opacity utilities keep working. ───────── */
+:root, :root[data-theme='dark'] {
+  color-scheme: dark;
+  --navy-950: 7 18 42; --navy-900: 12 27 58; --navy-800: 19 38 80; --navy-700: 28 50 99; --navy-600: 43 69 128;
+  --paper: 234 240 250; --mist: 157 176 208; --white: 255 255 255; --black: 0 0 0;
+  --accent: 189 242 61; --danger: 252 165 165; --ink: 7 18 42; --logo: 189 242 61;
+  --glass-top: rgba(255,255,255,.075); --glass-bottom: rgba(255,255,255,.03); --glass-border: rgba(255,255,255,.11);
+  --glass-hi: rgba(255,255,255,.16); --glass-shadow: rgba(0,0,0,.6); --strong-bg: rgba(12,27,58,.84);
+  --grid-line: rgba(157,176,208,.07); --stroke: rgba(157,176,208,.42);
+  --glow-a: rgba(189,242,61,.10); --glow-b: rgba(43,69,128,.45); --btn-hover: #ffffff;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --navy-950: 243 246 252; --navy-900: 255 255 255; --navy-800: 236 241 250; --navy-700: 224 232 245; --navy-600: 196 208 230;
+  --paper: 11 27 58; --mist: 84 100 132; --white: 11 27 58; --black: 11 27 58;
+  --accent: 77 124 15; --danger: 185 28 28; --ink: 7 18 42; --logo: 11 27 58;
+  --glass-top: rgba(255,255,255,.88); --glass-bottom: rgba(255,255,255,.62); --glass-border: rgba(11,27,58,.10);
+  --glass-hi: rgba(255,255,255,.95); --glass-shadow: rgba(30,50,100,.22); --strong-bg: rgba(255,255,255,.95);
+  --grid-line: rgba(11,27,58,.06); --stroke: rgba(11,27,58,.32);
+  --glow-a: rgba(150,210,30,.24); --glow-b: rgba(120,160,230,.38); --btn-hover: #A6DB2B;
+}
+
+@layer base {
+  html { @apply bg-navy-950 text-paper font-sans antialiased; }
+  h1, h2, h3 { @apply font-display tracking-tight; }
+  :focus-visible { @apply outline outline-2 outline-offset-2 outline-accent; }
+  ::selection { background: #BDF23D; color: #07122A; }
+}
+
+@layer components {
+  .bg-grid { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%); }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .btn { @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-lime text-ink; }
+  .btn-primary:hover:not(:disabled) { background: var(--btn-hover); }
+  .btn-ghost { @apply btn border border-navy-600 text-paper hover:border-accent hover:text-accent; }
+  .card { @apply rounded-3xl border border-white/10 bg-white/[.04] backdrop-blur; }
+  .input { @apply w-full rounded-lg border border-navy-600 bg-navy-950 px-3.5 py-2.5 text-sm text-paper placeholder:text-mist/60 focus:border-accent; }
+}
+
+/* ───────── Motion, glass and giant type ───────── */
+.giant { font-size: clamp(3.2rem, 10.5vw, 9.5rem); line-height: .9; letter-spacing: -.045em; font-weight: 800; }
+.giant-md { font-size: clamp(2.8rem, 8vw, 6.5rem); line-height: .92; letter-spacing: -.04em; font-weight: 800; }
+.accent { color: rgb(var(--accent)); }
+
+.glass { background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom)); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border: 1px solid var(--glass-border); box-shadow: inset 0 1px 0 var(--glass-hi), 0 24px 60px -30px var(--glass-shadow); }
+.glass-strong { background: var(--strong-bg); backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%); border-left: 1px solid var(--glass-border); }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0ms); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+.line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+.line > span { display: block; transform: translateY(108%); animation: lineUp .95s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: var(--d, 0ms); }
+@keyframes lineUp { to { transform: none; } }
+
+.spot { position: relative; }
+.spot::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 0%), var(--glow-a), transparent 60%); }
+.spot:hover::before { opacity: 1; }
+
+.hero-glow { background: radial-gradient(700px circle at var(--mx, 72%) var(--my, 22%), var(--glow-a), transparent 60%), radial-gradient(900px circle at 10% 90%, var(--glow-b), transparent 60%); }
+
+.outline-text { color: transparent; -webkit-text-stroke: 1.5px var(--stroke); transition: color .4s, -webkit-text-stroke-color .4s; }
+.group:hover .outline-text { color: rgb(var(--paper)); -webkit-text-stroke-color: transparent; }
+
+.marquee-track { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* Smooth colour change while switching theme (added by the toggle for a moment). */
+.theme-anim, .theme-anim *, .theme-anim *::before, .theme-anim *::after { transition: background-color .35s, color .35s, border-color .35s, box-shadow .35s !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .line > span { transform: none !important; }
+  .marquee-track { animation: none !important; }
+}
+
+/* ───────── Phones ───────── */
+html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); }
+/* 16px stops iPhones zooming into a field when it is tapped. */
+@media (max-width: 640px) { .input { font-size: 16px; } }
